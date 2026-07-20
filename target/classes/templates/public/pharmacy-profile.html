@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Meet KARTHIK. S — Registered Pharmacist at Gaja Medicals. Prescription dispensing, medicine counseling, home delivery &amp; more.">
+    <title>Gaja Medicals — Registered Pharmacist | Gaja Clinic</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/public-site.css}">
+    <link rel="stylesheet" th:href="@{/css/pharmacy-profile.css}">
+</head>
+<body class="page-public page-pharmacy-profile">
+
+<div th:replace="~{fragments/public-navbar :: navbar}"></div>
+
+<div th:replace="~{fragments/pharmacy-profile-hero :: hero(${pharmacy})}"></div>
+
+<!-- About -->
+<section id="pharmacy-about" class="section-public">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-5 reveal reveal-left">
+                <h2 class="section-title mb-3">About Pharmacist</h2>
+                <p class="about-lead text-muted mb-0" th:text="${pharmacy.about}">
+                    KARTHIK. S is a Registered Pharmacist at Gaja Clinic &amp; Gaja Medicals...
+                </p>
+            </div>
+            <div class="col-lg-7 reveal reveal-right">
+                <div class="about-glass-card glass-card">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <div class="about-highlight">
+                                <i class="bi bi-shield-check"></i>
+                                <div>
+                                    <strong>Safe Dispensing</strong>
+                                    <span>Accurate prescription verification every time</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="about-highlight">
+                                <i class="bi bi-chat-heart"></i>
+                                <div>
+                                    <strong>Patient Counseling</strong>
+                                    <span>Clear guidance on medicine usage</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="about-highlight">
+                                <i class="bi bi-truck"></i>
+                                <div>
+                                    <strong>Home Delivery</strong>
+                                    <span>Free delivery for your convenience</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="about-highlight">
+                                <i class="bi bi-heart-pulse"></i>
+                                <div>
+                                    <strong>Healthcare Support</strong>
+                                    <span>BP, CBG monitoring &amp; more</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Professional Services -->
+<section id="pharmacy-services" class="section-public bg-light-section">
+    <div class="container">
+        <div class="text-center mb-5 reveal">
+            <h2 class="section-title">Professional Services</h2>
+            <p class="section-subtitle mx-auto">Comprehensive pharmacy services for your health and wellness needs.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-sm-6 col-lg-4 reveal reveal-delay-1">
+                <div class="pharmacy-service-card">
+                    <div class="pharmacy-svc-icon"><i class="bi bi-prescription2"></i></div>
+                    <h5>Prescription Dispensing</h5>
+                    <p>Accurate and timely dispensing of prescribed medications.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4 reveal reveal-delay-2">
+                <div class="pharmacy-service-card">
+                    <div class="pharmacy-svc-icon"><i class="bi bi-chat-dots"></i></div>
+                    <h5>Medicine Counseling</h5>
+                    <p>Professional guidance on dosage, timing, and safe medicine use.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4 reveal reveal-delay-3">
+                <div class="pharmacy-service-card">
+                    <div class="pharmacy-svc-icon"><i class="bi bi-calendar2-check"></i></div>
+                    <h5>Monthly Medicine Pre-Order</h5>
+                    <p>Plan monthly refills in advance for uninterrupted treatment.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4 reveal reveal-delay-1">
+                <div class="pharmacy-service-card">
+                    <div class="pharmacy-svc-icon"><i class="bi bi-truck"></i></div>
+                    <h5>Free Home Delivery</h5>
+                    <p>Medicines delivered safely to your doorstep at no extra cost.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4 reveal reveal-delay-2">
+                <div class="pharmacy-service-card">
+                    <div class="pharmacy-svc-icon"><i class="bi bi-activity"></i></div>
+                    <h5>BP Monitoring</h5>
+                    <p>Blood pressure checks available during your pharmacy visit.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4 reveal reveal-delay-3">
+                <div class="pharmacy-service-card">
+                    <div class="pharmacy-svc-icon"><i class="bi bi-droplet-half"></i></div>
+                    <h5>Random Blood Sugar (CBG) Monitoring</h5>
+                    <p>Capillary blood glucose testing for diabetes management.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4 reveal reveal-delay-1">
+                <div class="pharmacy-service-card">
+                    <div class="pharmacy-svc-icon"><i class="bi bi-wind"></i></div>
+                    <h5>Nebulizer Machine Rental</h5>
+                    <p>Affordable nebulizer rental for respiratory care at home.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4 reveal reveal-delay-2">
+                <div class="pharmacy-service-card">
+                    <div class="pharmacy-svc-icon"><i class="bi bi-person-hearts"></i></div>
+                    <h5>Homecare Nursing Support</h5>
+                    <p>Coordinated nursing support for recovery and elderly care.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4 reveal reveal-delay-3">
+                <div class="pharmacy-service-card">
+                    <div class="pharmacy-svc-icon"><i class="bi bi-shield-check"></i></div>
+                    <h5>Genuine Medicines</h5>
+                    <p>100% authentic products from licensed suppliers only.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4 reveal reveal-delay-1">
+                <div class="pharmacy-service-card">
+                    <div class="pharmacy-svc-icon"><i class="bi bi-tag"></i></div>
+                    <h5>Affordable Pricing</h5>
+                    <p>Fair, transparent pricing on all medicines and services.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4 reveal reveal-delay-2">
+                <div class="pharmacy-service-card">
+                    <div class="pharmacy-svc-icon"><i class="bi bi-heart-pulse"></i></div>
+                    <h5>Health &amp; Wellness Guidance</h5>
+                    <p>Trusted advice on supplements, wellness, and preventive care.</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4 reveal reveal-delay-3">
+                <div class="pharmacy-service-card">
+                    <div class="pharmacy-svc-icon"><i class="bi bi-arrow-repeat"></i></div>
+                    <h5>Prescription Refill Assistance</h5>
+                    <p>Easy refill support for your ongoing prescriptions.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Professional Skills -->
+<section id="pharmacy-skills" class="section-public">
+    <div class="container">
+        <div class="text-center mb-5 reveal">
+            <h2 class="section-title">Professional Skills</h2>
+            <p class="section-subtitle mx-auto">Core competencies that ensure safe, reliable pharmacy care.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 reveal reveal-delay-1">
+                <div class="skill-card glass-card">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="skill-name">Prescription Verification</span>
+                        <span class="skill-pct">95%</span>
+                    </div>
+                    <div class="skill-bar-track">
+                        <div class="skill-bar-fill" data-skill-pct="95" style="width:0"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 reveal reveal-delay-2">
+                <div class="skill-card glass-card">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="skill-name">Medicine Safety</span>
+                        <span class="skill-pct">98%</span>
+                    </div>
+                    <div class="skill-bar-track">
+                        <div class="skill-bar-fill" data-skill-pct="98" style="width:0"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 reveal reveal-delay-1">
+                <div class="skill-card glass-card">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="skill-name">Patient Counseling</span>
+                        <span class="skill-pct">92%</span>
+                    </div>
+                    <div class="skill-bar-track">
+                        <div class="skill-bar-fill" data-skill-pct="92" style="width:0"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 reveal reveal-delay-2">
+                <div class="skill-card glass-card">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="skill-name">Drug Interaction Guidance</span>
+                        <span class="skill-pct">90%</span>
+                    </div>
+                    <div class="skill-bar-track">
+                        <div class="skill-bar-fill" data-skill-pct="90" style="width:0"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 reveal reveal-delay-3">
+                <div class="skill-card glass-card">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="skill-name">Inventory Management</span>
+                        <span class="skill-pct">88%</span>
+                    </div>
+                    <div class="skill-bar-track">
+                        <div class="skill-bar-fill" data-skill-pct="88" style="width:0"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 reveal reveal-delay-3">
+                <div class="skill-card glass-card">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="skill-name">Healthcare Support</span>
+                        <span class="skill-pct">94%</span>
+                    </div>
+                    <div class="skill-bar-track">
+                        <div class="skill-bar-fill" data-skill-pct="94" style="width:0"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics -->
+<section class="section-public pt-0">
+    <div class="container">
+        <div class="stats-strip reveal">
+            <div class="stat-pill reveal reveal-delay-1">
+                <div class="stat-num" th:attr="data-count=${pharmacy.statYears},data-suffix='+'">0</div>
+                <div class="stat-desc">Years of Experience</div>
+            </div>
+            <div class="stat-pill reveal reveal-delay-2">
+                <div class="stat-num" th:attr="data-count=${pharmacy.statPatients},data-suffix='+'">0</div>
+                <div class="stat-desc">Patients Assisted</div>
+            </div>
+            <div class="stat-pill reveal reveal-delay-3">
+                <div class="stat-num" th:attr="data-count=${pharmacy.statPrescriptions},data-suffix='+'">0</div>
+                <div class="stat-desc">Prescriptions Dispensed</div>
+            </div>
+            <div class="stat-pill reveal reveal-delay-3">
+                <div class="stat-num" th:attr="data-count=${pharmacy.statSatisfaction},data-suffix='%'">0</div>
+                <div class="stat-desc">Customer Satisfaction</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery -->
+<section id="pharmacy-gallery" class="section-public bg-light-section">
+    <div class="container">
+        <div class="text-center mb-5 reveal">
+            <h2 class="section-title">Pharmacy Gallery</h2>
+            <p class="section-subtitle mx-auto">A glimpse of our pharmacy environment and patient care facilities.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-sm-6 col-lg-4 reveal reveal-delay-1">
+                <div class="gallery-card gallery-grad-1">
+                    <div class="gallery-card-inner">
+                        <i class="bi bi-shop gallery-icon"></i>
+                        <span class="gallery-label">Pharmacy Counter</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4 reveal reveal-delay-2">
+                <div class="gallery-card gallery-grad-2">
+                    <div class="gallery-card-inner">
+                        <i class="bi bi-grid-3x3-gap gallery-icon"></i>
+                        <span class="gallery-label">Medicine Shelves</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4 reveal reveal-delay-3">
+                <div class="gallery-card gallery-grad-3">
+                    <div class="gallery-card-inner">
+                        <i class="bi bi-box-seam gallery-icon"></i>
+                        <span class="gallery-label">Medical Products</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-6 reveal reveal-delay-1">
+                <div class="gallery-card gallery-grad-4">
+                    <div class="gallery-card-inner">
+                        <i class="bi bi-people gallery-icon"></i>
+                        <span class="gallery-label">Customer Assistance</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-6 reveal reveal-delay-2">
+                <div class="gallery-card gallery-grad-5">
+                    <div class="gallery-card-inner">
+                        <i class="bi bi-hospital gallery-icon"></i>
+                        <span class="gallery-label">Healthcare Equipment</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{fragments/pharmacy-profile-contact :: contact(${pharmacy})}"></div>
+
+<!-- CTA -->
+<section class="section-public pt-0">
+    <div class="container">
+        <div class="cta-band reveal">
+            <h3>Need medicines or pharmacy guidance?</h3>
+            <p>Contact Gaja Medicals — we're here to help with safe, affordable care.</p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a th:href="${pharmacy.whatsAppUrl}" target="_blank" rel="noopener" class="btn btn-hero">
+                    <i class="bi bi-whatsapp me-2"></i>WhatsApp Pharmacy
+                </a>
+                <a th:href="'tel:' + ${#strings.replace(pharmacy.phone, ' ', '')}" class="btn btn-hero-outline">
+                    <i class="bi bi-telephone-fill me-2"></i>Call Now
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{fragments/public-footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/public-site.js}"></script>
+<script th:src="@{/js/pharmacy-profile.js}"></script>
+</body>
+</html>

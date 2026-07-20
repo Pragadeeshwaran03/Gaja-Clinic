@@ -1,0 +1,487 @@
+/* Gaja Medicals — Pharmacy Profile Page */
+.page-pharmacy-profile {
+    --blue-primary: #1565c0;
+    --blue-deep: #0d47a1;
+    --blue-soft: #e3f2fd;
+    --green-primary: #2e7d32;
+    --green-soft: #e8f5e9;
+    --glass-bg: rgba(255, 255, 255, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.55);
+    --primary-accent: var(--blue-primary);
+}
+
+.page-pharmacy-profile .pt-navbar {
+    padding-top: 6.5rem;
+}
+
+.page-pharmacy-profile .section-title {
+    color: var(--blue-deep);
+}
+
+.page-pharmacy-profile .text-primary-accent {
+    color: var(--blue-primary) !important;
+}
+
+/* Glassmorphism */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Page header */
+.pharmacy-page-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.pharmacy-back-link {
+    display: inline-flex;
+    align-items: center;
+    color: var(--blue-primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    transition: var(--transition);
+}
+
+.pharmacy-back-link:hover {
+    color: var(--green-primary);
+}
+
+/* Profile showcase — mirrors doctor-showcase */
+.pharmacy-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 3rem;
+    align-items: center;
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: 2.5rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--gray-200);
+}
+
+.pharmacy-photo-frame {
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.pharmacy-photo-frame img {
+    width: 100%;
+    height: 480px;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    transition: transform 0.6s ease;
+}
+
+.pharmacy-showcase:hover .pharmacy-photo-frame img {
+    transform: scale(1.03);
+}
+
+.pharmacy-photo-badge {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    background: linear-gradient(135deg, var(--blue-primary), var(--green-primary));
+    color: #fff;
+    padding: 0.45rem 0.9rem;
+    border-radius: 50px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.pharmacy-tag {
+    display: inline-block;
+    background: var(--blue-soft);
+    color: var(--blue-deep);
+    padding: 0.35rem 0.85rem;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.pharmacy-name {
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: 800;
+    margin-bottom: 0.35rem;
+}
+
+.pharmacy-reg {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    margin-bottom: 1rem;
+}
+
+.qual-badge-blue {
+    background: var(--blue-deep) !important;
+    color: #fff;
+}
+
+.qual-badge-green {
+    background: var(--green-primary) !important;
+    color: #fff;
+}
+
+.pharmacy-info-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.pharmacy-info-mini {
+    background: var(--gray-50);
+    border-radius: 14px;
+    padding: 1rem;
+    border: 1px solid var(--gray-200);
+    transition: var(--transition);
+}
+
+.pharmacy-info-mini:hover {
+    border-color: rgba(21, 101, 192, 0.25);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-2px);
+}
+
+.pharmacy-info-mini i {
+    color: var(--blue-primary);
+    font-size: 1.2rem;
+    margin-bottom: 0.35rem;
+    display: block;
+}
+
+.pharmacy-info-mini strong {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+
+.pharmacy-info-mini span {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.btn-pharmacy-primary {
+    background: linear-gradient(135deg, var(--blue-primary), var(--green-primary));
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-pharmacy-primary:hover {
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(21, 101, 192, 0.28);
+}
+
+.btn-pharmacy-outline {
+    background: transparent;
+    color: var(--blue-deep);
+    border: 2px solid var(--blue-primary);
+    padding: 0.7rem 1.4rem;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-pharmacy-outline:hover {
+    background: var(--blue-soft);
+    color: var(--blue-deep);
+    transform: translateY(-2px);
+}
+
+/* About */
+.about-lead {
+    font-size: 1.05rem;
+    line-height: 1.75;
+}
+
+.about-glass-card {
+    padding: 2rem;
+}
+
+.about-highlight {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid var(--gray-200);
+    height: 100%;
+    transition: var(--transition);
+}
+
+.about-highlight:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-sm);
+}
+
+.about-highlight i {
+    font-size: 1.4rem;
+    color: var(--blue-primary);
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+}
+
+.about-highlight strong {
+    display: block;
+    font-size: 0.92rem;
+    margin-bottom: 0.2rem;
+}
+
+.about-highlight span {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+
+/* Service cards */
+.pharmacy-service-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    height: 100%;
+    border: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.pharmacy-service-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(21, 101, 192, 0.15);
+    border-color: rgba(21, 101, 192, 0.2);
+}
+
+.pharmacy-service-card:hover .pharmacy-svc-icon {
+    transform: scale(1.08) rotate(-3deg);
+}
+
+.pharmacy-svc-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1rem;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--blue-primary), var(--green-primary));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pharmacy-service-card h5 {
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+    font-size: 1rem;
+}
+
+.pharmacy-service-card p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* Skills */
+.skill-card {
+    padding: 1.25rem 1.5rem;
+    transition: var(--transition);
+}
+
+.skill-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.skill-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.skill-pct {
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--blue-primary);
+}
+
+.skill-bar-track {
+    height: 8px;
+    background: var(--gray-200);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.skill-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue-primary), var(--green-primary));
+    border-radius: 999px;
+    transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Stats strip */
+.stats-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    background: linear-gradient(135deg, var(--blue-deep), var(--blue-primary), var(--green-primary));
+    background-size: 200% 200%;
+    animation: pharmacy-gradient-flow 8s ease infinite;
+    border-radius: var(--radius-xl);
+    padding: 2.5rem 2rem;
+    box-shadow: 0 16px 48px rgba(13, 71, 161, 0.25);
+}
+
+@keyframes pharmacy-gradient-flow {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+}
+
+.stat-pill {
+    text-align: center;
+    color: #fff;
+    padding: 0.5rem;
+}
+
+.stat-num {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 0.35rem;
+}
+
+.stat-desc {
+    font-size: 0.88rem;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+/* Gallery */
+.gallery-card {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    min-height: 220px;
+    position: relative;
+    transition: var(--transition);
+    cursor: default;
+}
+
+.gallery-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: var(--shadow-md);
+}
+
+.gallery-card-inner {
+    height: 100%;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 2rem;
+    color: #fff;
+}
+
+.gallery-icon {
+    font-size: 2.5rem;
+    opacity: 0.9;
+}
+
+.gallery-label {
+    font-weight: 700;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.gallery-grad-1 { background: linear-gradient(135deg, #1565c0, #42a5f5); }
+.gallery-grad-2 { background: linear-gradient(135deg, #2e7d32, #66bb6a); }
+.gallery-grad-3 { background: linear-gradient(135deg, #00838f, #4dd0e1); }
+.gallery-grad-4 { background: linear-gradient(135deg, #0d47a1, #5c6bc0); }
+.gallery-grad-5 { background: linear-gradient(135deg, #1b5e20, #81c784); }
+
+/* Contact overrides */
+.page-pharmacy-profile .location-info h4 {
+    color: var(--blue-deep);
+}
+
+.page-pharmacy-profile .btn-call {
+    background: linear-gradient(135deg, var(--blue-primary), var(--blue-deep));
+}
+
+.page-pharmacy-profile .cta-band {
+    background: linear-gradient(-45deg, var(--blue-deep), var(--blue-primary), var(--green-primary), var(--blue-deep));
+    background-size: 300% 300%;
+    animation: pharmacy-gradient-flow 10s ease infinite;
+}
+
+/* Responsive */
+@media (max-width: 991.98px) {
+    .page-pharmacy-profile .pt-navbar {
+        padding-top: 5.5rem;
+    }
+
+    .pharmacy-showcase {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+    }
+
+    .pharmacy-photo-frame img {
+        height: 360px;
+    }
+
+    .pharmacy-info-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-strip {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 2rem 1.25rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .stats-strip {
+        grid-template-columns: 1fr;
+    }
+
+    .gallery-card {
+        min-height: 180px;
+    }
+
+    .gallery-card-inner {
+        min-height: 180px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stats-strip,
+    .page-pharmacy-profile .cta-band {
+        animation: none;
+    }
+
+    .skill-bar-fill {
+        transition: none;
+    }
+}

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription Items - Gaja Clinic</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/gaja-theme.css}">
+    <style>
+        /* ── Radio Pill Group ───────────────────────────────────── */
+        .radio-pill-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .radio-pill-group input[type="radio"] {
+            display: none;
+        }
+        .radio-pill-group label {
+            padding: 3px 10px;
+            border-radius: 20px;
+            border: 1.5px solid #ccc;
+            font-size: .78rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all .15s ease;
+            background: #fff;
+            color: #555;
+            user-select: none;
+            line-height: 1.6;
+        }
+        .radio-pill-group input[type="radio"]:checked + label {
+            background: var(--gaja-primary, #b71c1c);
+            border-color: var(--gaja-primary, #b71c1c);
+            color: #fff;
+            font-weight: 600;
+        }
+        .radio-pill-group label:hover {
+            border-color: var(--gaja-primary, #b71c1c);
+            color: var(--gaja-primary, #b71c1c);
+        }
+        .radio-pill-group input[type="radio"]:checked + label:hover {
+            color: #fff;
+        }
+
+        /* Custom dosage input that appears when "Custom" is selected */
+        .custom-dosage-input {
+            display: none;
+            margin-top: 6px;
+        }
+        .custom-dosage-input.show {
+            display: block;
+        }
+
+        /* ── Medicine card row ──────────────────────────────────── */
+        .med-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,.06);
+            position: relative;
+        }
+        .med-card .med-row-num {
+            font-size: .72rem;
+            font-weight: 700;
+            color: var(--gaja-primary, #b71c1c);
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            margin-bottom: 8px;
+        }
+        .med-card .remove-row {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+        }
+        .field-label {
+            font-size: .75rem;
+            font-weight: 600;
+            color: #6c757d;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+    </style>
+</head>
+<body class="gaja-app">
+<nav class="navbar navbar-dark gaja-navbar">
+    <div class="container-fluid">
+        <span class="navbar-brand">Gaja Clinic — Doctor</span>
+        <form th:action="@{/account/logout}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <h2 class="mb-1">Prescription Items</h2>
+    <p class="text-muted mb-4">Add medicines for this consultation</p>
+
+    <div class="card">
+        <div class="card-body">
+            <div id="errorAlert" class="alert alert-danger py-2 small d-none" role="alert">
+                <span id="errorMessage"></span>
+            </div>
+
+            <form id="prescriptionForm">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <input type="hidden" name="prescriptionId" th:value="${prescriptionCreateDto.prescriptionId}"/>
+
+                <!-- Patient info + condition -->
+                <div class="card mb-4 border-0" style="background:#f8f9fa; border-radius:10px;">
+                    <div class="card-body py-3">
+                        <div class="mb-3" th:if="${prescription.patient != null}">
+                            <div class="field-label">Patient Name</div>
+                            <div class="fw-semibold" th:text="${prescription.patient.name}">Patient Name</div>
+                        </div>
+                        <div>
+                            <div class="field-label"><i class="bi bi-clipboard2-pulse me-1"></i>Patient Condition</div>
+                            <textarea class="form-control form-control-sm" name="patientCondition" rows="3"
+                                      th:text="${prescriptionCreateDto.patientCondition}"
+                                      placeholder="e.g. Fever, cold, body pain, cough…"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="itemsContainer">
+                    <!-- Thymeleaf-rendered existing rows -->
+                    <div class="med-card" th:each="item, stat : ${prescriptionCreateDto.items}">
+                        <div class="med-row-num" th:text="'Medicine ' + ${stat.index + 1}">Medicine 1</div>
+                        <button type="button" class="btn btn-sm btn-outline-danger remove-row"><i class="bi bi-trash"></i></button>
+
+                        <div class="row g-3">
+                            <!-- Medicine Name -->
+                            <div class="col-md-5">
+                                <div class="field-label">Medicine Name *</div>
+                                <input class="form-control form-control-sm"
+                                       th:name="'items[' + ${stat.index} + '].medicineName'"
+                                       th:value="${item.medicineName}"
+                                       placeholder="Medicine name" required/>
+                            </div>
+                            <!-- Qty -->
+                            <div class="col-md-2">
+                                <div class="field-label">Qty</div>
+                                <input class="form-control form-control-sm"
+                                       th:name="'items[' + ${stat.index} + '].quantity'"
+                                       type="number" min="1"
+                                       th:value="${item.quantity > 0 ? item.quantity : 1}" required/>
+                            </div>
+                            <!-- Duration -->
+                            <div class="col-md-3">
+                                <div class="field-label">Duration</div>
+                                <input class="form-control form-control-sm"
+                                       th:name="'items[' + ${stat.index} + '].duration'"
+                                       th:value="${item.duration}" placeholder="e.g. 30 Days"/>
+                            </div>
+                        </div>
+
+                        <!-- Dosage Radio Pills -->
+                        <div class="mt-3">
+                            <div class="field-label">Dosage (M-A-N)</div>
+                            <div class="radio-pill-group">
+                                <th:block th:each="opt : ${ {'0-0-0','1-0-0','0-1-0','0-0-1','1-1-1','1-0-1','1-1-0','2-0-0','2-0-1'} }">
+                                    <input type="radio" class="dosage-radio"
+                                           th:id="'dosage_' + ${stat.index} + '_' + ${opt}"
+                                           th:name="'items[' + ${stat.index} + '].dosage'"
+                                           th:value="${opt}"
+                                           th:checked="${item.dosage == opt}"/>
+                                    <label th:for="'dosage_' + ${stat.index} + '_' + ${opt}" th:text="${opt}">0-0-0</label>
+                                </th:block>
+                                <!-- Custom option -->
+                                <input type="radio" class="dosage-radio"
+                                       th:id="'dosage_' + ${stat.index} + '_custom'"
+                                       th:name="'items[' + ${stat.index} + '].dosage'"
+                                       value="__custom__"
+                                       th:checked="${item.dosage != null and item.dosage != '' and
+                                           !#lists.contains({'0-0-0','1-0-0','0-1-0','0-0-1','1-1-1','1-0-1','1-1-0','2-0-0','2-0-1'}, item.dosage)}"/>
+                                <label th:for="'dosage_' + ${stat.index} + '_custom'">Custom</label>
+                            </div>
+                            <!-- Custom text input (hidden unless Custom is selected) -->
+                            <input type="text" class="form-control form-control-sm custom-dosage-input mt-2"
+                                   th:classappend="${item.dosage != null and item.dosage != '' and
+                                       !#lists.contains({'0-0-0','1-0-0','0-1-0','0-0-1','1-1-1','1-0-1','1-1-0','2-0-0','2-0-1'}, item.dosage)} ? ' show' : ''"
+                                   th:value="${item.dosage != null and !#lists.contains({'0-0-0','1-0-0','0-1-0','0-0-1','1-1-1','1-0-1','1-1-0','2-0-0','2-0-1'}, item.dosage) ? item.dosage : ''}"
+                                   placeholder="Type custom dosage…"/>
+                        </div>
+
+                        <!-- Timing / Instructions Radio Pills -->
+                        <div class="mt-3">
+                            <div class="field-label">Timing / Instructions</div>
+                            <div class="radio-pill-group">
+                                <th:block th:each="opt : ${ {'After Food - Daily','Before Food - Daily','Morning - Empty Stomach','After Food - Twice Daily','Before Food - Twice Daily','Morning - After Breakfast','Afternoon - After Lunch','Night - After Dinner','Before Sleep','SOS (When Required)','As Directed'} }">
+                                    <input type="radio" class="timing-radio"
+                                           th:id="'timing_' + ${stat.index} + '_' + ${opt}"
+                                           th:name="'items[' + ${stat.index} + '].instructions'"
+                                           th:value="${opt}"
+                                           th:checked="${item.instructions == opt}"/>
+                                    <label th:for="'timing_' + ${stat.index} + '_' + ${opt}" th:text="${opt}">After Food - Daily</label>
+                                </th:block>
+                            </div>
+                        </div>
+
+                    </div><!-- /med-card -->
+                </div><!-- /itemsContainer -->
+
+                <!-- Doctor's Notes / Advice -->
+                <div class="card mt-4 border-0" style="background:#f8f9fa; border-radius:10px;">
+                    <div class="card-body py-3">
+                        <div class="field-label"><i class="bi bi-journal-text me-1"></i>Doctor's Notes / Advice</div>
+                        <textarea class="form-control form-control-sm" name="notes" rows="3"
+                                  th:text="${prescriptionCreateDto.notes}"
+                                  placeholder="e.g. Injection names, dietary advice, follow-up instructions…"></textarea>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 mt-2">
+                    <button type="button" id="addRow" class="btn btn-outline-secondary">
+                        <i class="bi bi-plus-circle me-1"></i>Add Medicine
+                    </button>
+                    <button type="button" id="saveBtn" class="btn btn-primary ms-auto">
+                        <i class="bi bi-check-circle me-1"></i>Save Prescription
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+(function () {
+    var rowIndex = /*[[${prescriptionCreateDto.items.size()}]]*/ 1;
+    var csrfName = /*[[${_csrf.parameterName}]]*/ '_csrf';
+    var csrfToken = /*[[${_csrf.token}]]*/ '';
+    var errorAlert = document.getElementById('errorAlert');
+    var errorMsg   = document.getElementById('errorMessage');
+    var saveBtn    = document.getElementById('saveBtn');
+
+    var DOSAGE_OPTS  = ['0-0-0','1-0-0','0-1-0','0-0-1','1-1-1','1-0-1','1-1-0','2-0-0','2-0-1'];
+    var TIMING_OPTS  = [
+        'After Food - Daily','Before Food - Daily','Morning - Empty Stomach',
+        'After Food - Twice Daily','Before Food - Twice Daily','Morning - After Breakfast',
+        'Afternoon - After Lunch','Night - After Dinner','Before Sleep',
+        'SOS (When Required)','As Directed'
+    ];
+
+    // ── Build a pill radio group HTML ──────────────────────────────
+    function pillsHtml(options, name, includeCustom) {
+        var html = '<div class="radio-pill-group">';
+        options.forEach(function (opt) {
+            var id = name + '_' + opt.replace(/[^a-zA-Z0-9]/g, '_');
+            html += '<input type="radio" class="dosage-radio" id="' + id + '" name="' + name + '" value="' + opt + '">' +
+                    '<label for="' + id + '">' + opt + '</label>';
+        });
+        if (includeCustom) {
+            var cid = name + '_custom';
+            html += '<input type="radio" class="dosage-radio" id="' + cid + '" name="' + name + '" value="__custom__">' +
+                    '<label for="' + cid + '">Custom</label>';
+        }
+        html += '</div>';
+        return html;
+    }
+
+    // ── Build a full medicine card HTML ────────────────────────────
+    function buildCard(idx) {
+        return '<div class="med-card">' +
+            '<div class="med-row-num">Medicine ' + (idx + 1) + '</div>' +
+            '<button type="button" class="btn btn-sm btn-outline-danger remove-row"><i class="bi bi-trash"></i></button>' +
+            '<div class="row g-3">' +
+              '<div class="col-md-5">' +
+                '<div class="field-label">Medicine Name *</div>' +
+                '<input class="form-control form-control-sm" name="items[' + idx + '].medicineName" placeholder="Medicine name" required/>' +
+              '</div>' +
+              '<div class="col-md-2">' +
+                '<div class="field-label">Qty</div>' +
+                '<input class="form-control form-control-sm" name="items[' + idx + '].quantity" type="number" min="1" value="1" required/>' +
+              '</div>' +
+              '<div class="col-md-3">' +
+                '<div class="field-label">Duration</div>' +
+                '<input class="form-control form-control-sm" name="items[' + idx + '].duration" placeholder="e.g. 30 Days"/>' +
+              '</div>' +
+            '</div>' +
+            '<div class="mt-3">' +
+              '<div class="field-label">Dosage (M-A-N)</div>' +
+              pillsHtml(DOSAGE_OPTS, 'items[' + idx + '].dosage', true) +
+              '<input type="text" class="form-control form-control-sm custom-dosage-input mt-2" placeholder="Type custom dosage…"/>' +
+            '</div>' +
+            '<div class="mt-3">' +
+              '<div class="field-label">Timing / Instructions</div>' +
+              pillsHtml(TIMING_OPTS, 'items[' + idx + '].instructions', false) +
+            '</div>' +
+        '</div>';
+    }
+
+    // ── Delegate: Custom dosage toggle ─────────────────────────────
+    document.getElementById('itemsContainer').addEventListener('change', function (e) {
+        if (e.target.type === 'radio' && e.target.closest('.radio-pill-group')) {
+            var card = e.target.closest('.med-card');
+            if (!card) return;
+            var customInput = card.querySelector('.custom-dosage-input');
+            if (!customInput) return;
+            // Show custom input only if the Custom radio in THIS card is selected
+            var customRadio = card.querySelector('input[value="__custom__"]');
+            if (customRadio && customRadio.checked) {
+                customInput.classList.add('show');
+                customInput.focus();
+            } else {
+                customInput.classList.remove('show');
+                customInput.value = '';
+            }
+        }
+    });
+
+    // ── Remove row ─────────────────────────────────────────────────
+    document.getElementById('itemsContainer').addEventListener('click', function (e) {
+        var btn = e.target.closest('.remove-row');
+        if (btn) {
+            var cards = document.querySelectorAll('.med-card');
+            if (cards.length > 1) {
+                btn.closest('.med-card').remove();
+            }
+        }
+    });
+
+    // ── Add Medicine ───────────────────────────────────────────────
+    document.getElementById('addRow').addEventListener('click', function () {
+        var container = document.getElementById('itemsContainer');
+        var div = document.createElement('div');
+        div.innerHTML = buildCard(rowIndex);
+        container.appendChild(div.firstChild);
+        rowIndex++;
+    });
+
+    // ── Before submit: resolve custom dosage values ────────────────
+    function resolveCustomDosage() {
+        document.querySelectorAll('.med-card').forEach(function (card) {
+            var customRadio = card.querySelector('input[value="__custom__"]');
+            var customInput = card.querySelector('.custom-dosage-input');
+            if (customRadio && customRadio.checked && customInput) {
+                // Replace __custom__ value with the typed value by changing the radio's value
+                customRadio.value = customInput.value.trim() || '—';
+            }
+        });
+    }
+
+    // ── Error helpers ──────────────────────────────────────────────
+    function showError(msg) { errorMsg.textContent = msg; errorAlert.classList.remove('d-none'); }
+    function hideError()    { errorAlert.classList.add('d-none'); }
+
+    // ── Save ───────────────────────────────────────────────────────
+    document.getElementById('saveBtn').addEventListener('click', function () {
+        var medInputs = document.querySelectorAll('#itemsContainer input[name$=".medicineName"]');
+        var anyFilled = false;
+        medInputs.forEach(function (inp) { if (inp.value.trim() !== '') anyFilled = true; });
+        if (!anyFilled) { showError('Please enter at least one medicine name.'); return; }
+
+        resolveCustomDosage();
+        hideError();
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving…';
+
+        var form = document.getElementById('prescriptionForm');
+        var formData = new FormData(form);
+
+        fetch('/doctor/prescription/create', {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(function (r) {
+            if (!r.ok) throw new Error('Server error: ' + r.status);
+            return r.json();
+        })
+        .then(function (data) {
+            if (data.success) {
+                window.location.href = data.redirectUrl;
+            } else {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save Prescription';
+                showError(data.message || 'An unknown error occurred.');
+            }
+        })
+        .catch(function (err) {
+            saveBtn.disabled = false;
+            saveBtn.textContent = 'Save Prescription';
+            showError('Network or server error: ' + err.message);
+        });
+    });
+}());
+</script>
+</body>
+</html>

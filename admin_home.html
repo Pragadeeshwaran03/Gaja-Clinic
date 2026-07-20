@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Gaja Clinic</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .stat-card { border-radius: 12px; padding: 1.25rem; color: #fff; min-height: 110px; }
+        .stat-card-blue { background: linear-gradient(135deg, #1565c0, #0d47a1); }
+        .stat-card-green { background: linear-gradient(135deg, #2e7d32, #1b5e20); }
+        .stat-card-revenue { background: linear-gradient(135deg, #6a1b9a, #4a148c); }
+        .stat-value { font-size: 1.75rem; font-weight: 700; }
+        .stat-label { opacity: .9; font-size: .9rem; }
+    </style>
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-dark" style="background:#4a148c;">
+    <div class="container-fluid">
+        <span class="navbar-brand"><i class="bi bi-shield-check me-1"></i> Gaja Clinic — Admin</span>
+        <div class="d-flex align-items-center gap-2">
+            <a href="/main-admin/home" class="btn btn-outline-light btn-sm">Dashboard</a>
+            <a href="/main-admin/pdf-archive" class="btn btn-outline-light btn-sm">PDF Archive</a>
+            <a href="/main-admin/reports" class="btn btn-outline-light btn-sm">Reports</a>
+            <a href="/main-admin/settings" class="btn btn-outline-light btn-sm">Settings</a>
+            <form action="/account/logout" method="post" class="ms-2"><input type="hidden" name="_csrf" value="EAtK-poHvBhQxz3lbH6-eRG25EsrR6h5X7cMvGtnc3ndCcAVKDgsy_swhHp9_wvUWVOKSSGOyXJIc85UZ4I-iVNQF0rtMKV0"/>
+                <input type="hidden" name="_csrf" value="EAtK-poHvBhQxz3lbH6-eRG25EsrR6h5X7cMvGtnc3ndCcAVKDgsy_swhHp9_wvUWVOKSSGOyXJIc85UZ4I-iVNQF0rtMKV0"/>
+                <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<main>
+    <h2 class="mb-1"><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</h2>
+    <p class="text-muted mb-4">Gaja Clinic &amp; Gaja Medicals — overview</p>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="stat-card stat-card-blue">
+                <div class="stat-value">7</div>
+                <div class="stat-label">Patients</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="stat-card stat-card-green">
+                <div class="stat-value">1</div>
+                <div class="stat-label">Doctors</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="stat-card stat-card-blue">
+                <div class="stat-value">20</div>
+                <div class="stat-label">Prescriptions</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="stat-card stat-card-green">
+                <div class="stat-value">20</div>
+                <div class="stat-label">Bills</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-6 col-xl-2">
+            <div class="stat-card stat-card-revenue">
+                <div class="stat-value">₹0</div>
+                <div class="stat-label">Today</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-6 col-xl-2">
+            <div class="stat-card stat-card-revenue">
+                <div class="stat-value">₹8,979</div>
+                <div class="stat-label">This Month</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header"><i class="bi bi-clock-history me-2"></i>Recent Activities</div>
+                
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+                        <span>
+                            <span class="badge rounded-pill me-2 bg-success">bill</span>
+                            <span>Bill BILL00020 — ₹246.00 (jayaventhan)</span>
+                        </span>
+                        <small class="text-muted text-nowrap ms-2">23 Jun 2026 20:55</small>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+                        <span>
+                            <span class="badge rounded-pill me-2 bg-success">bill</span>
+                            <span>Bill BILL00019 — ₹240.00 (Test Patient)</span>
+                        </span>
+                        <small class="text-muted text-nowrap ms-2">23 Jun 2026 20:51</small>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+                        <span>
+                            <span class="badge rounded-pill me-2 bg-info">patient</span>
+                            <span>New patient registered: Pharmacy Test (PAT00007)</span>
+                        </span>
+                        <small class="text-muted text-nowrap ms-2">23 Jun 2026 20:50</small>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+                        <span>
+                            <span class="badge rounded-pill me-2 bg-info">patient</span>
+                            <span>New patient registered: Test Patient (PAT00006)</span>
+                        </span>
+                        <small class="text-muted text-nowrap ms-2">23 Jun 2026 20:40</small>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+                        <span>
+                            <span class="badge rounded-pill me-2 bg-primary">prescription</span>
+                            <span>Prescription PRES00020 for jayaventhan</span>
+                        </span>
+                        <small class="text-muted text-nowrap ms-2">23 Jun 2026 15:24</small>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+                        <span>
+                            <span class="badge rounded-pill me-2 bg-primary">prescription</span>
+                            <span>Prescription PRES00019 for Test Patient</span>
+                        </span>
+                        <small class="text-muted text-nowrap ms-2">23 Jun 2026 15:11</small>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+                        <span>
+                            <span class="badge rounded-pill me-2 bg-success">bill</span>
+                            <span>Bill BILL00018 — ₹247.00 (jayaventhan)</span>
+                        </span>
+                        <small class="text-muted text-nowrap ms-2">22 Jun 2026 13:36</small>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+                        <span>
+                            <span class="badge rounded-pill me-2 bg-success">bill</span>
+                            <span>Bill BILL00017 — ₹300.00 (jenifer)</span>
+                        </span>
+                        <small class="text-muted text-nowrap ms-2">22 Jun 2026 13:27</small>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+                        <span>
+                            <span class="badge rounded-pill me-2 bg-success">bill</span>
+                            <span>Bill BILL00016 — ₹225.00 (vetri)</span>
+                        </span>
+                        <small class="text-muted text-nowrap ms-2">22 Jun 2026 13:25</small>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+                        <span>
+                            <span class="badge rounded-pill me-2 bg-info">patient</span>
+                            <span>New patient registered: vetri (PAT00005)</span>
+                        </span>
+                        <small class="text-muted text-nowrap ms-2">22 Jun 2026 13:13</small>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+                        <span>
+                            <span class="badge rounded-pill me-2 bg-info">patient</span>
+                            <span>New patient registered: Thesigan (PAT00004)</span>
+                        </span>
+                        <small class="text-muted text-nowrap ms-2">22 Jun 2026 12:17</small>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+                        <span>
+                            <span class="badge rounded-pill me-2 bg-primary">prescription</span>
+                            <span>Prescription PRES00018 for jayaventhan</span>
+                        </span>
+                        <small class="text-muted text-nowrap ms-2">22 Jun 2026 08:05</small>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+                        <span>
+                            <span class="badge rounded-pill me-2 bg-primary">prescription</span>
+                            <span>Prescription PRES00017 for jenifer</span>
+                        </span>
+                        <small class="text-muted text-nowrap ms-2">22 Jun 2026 07:56</small>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+                        <span>
+                            <span class="badge rounded-pill me-2 bg-primary">prescription</span>
+                            <span>Prescription PRES00016 for vetri</span>
+                        </span>
+                        <small class="text-muted text-nowrap ms-2">22 Jun 2026 07:55</small>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+                        <span>
+                            <span class="badge rounded-pill me-2 bg-info">patient</span>
+                            <span>New patient registered: jenifer (PAT00003)</span>
+                        </span>
+                        <small class="text-muted text-nowrap ms-2">21 Jun 2026 12:04</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header bg-success text-white"><i class="bi bi-lightning me-2"></i>Quick Actions</div>
+                <div class="card-body d-grid gap-2">
+                    <a href="/main-admin/pdf-archive" class="btn btn-outline-primary">
+                        <i class="bi bi-file-earmark-pdf me-1"></i> PDF Archive
+                    </a>
+                    <a href="/main-admin/reports" class="btn btn-outline-success">
+                        <i class="bi bi-download me-1"></i> Reports &amp; Export
+                    </a>
+                    <a href="/main-admin/settings" class="btn btn-outline-secondary">
+                        <i class="bi bi-gear me-1"></i> Clinic Settings
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

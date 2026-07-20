@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/admin-layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Clinic Settings - Gaja Clinic</title>
+</head>
+<body>
+<main>
+    <h2 class="mb-1"><i class="bi bi-gear me-2"></i>Clinic Settings</h2>
+    <p class="text-muted mb-4">Manage clinic information and configuration</p>
+
+    <div id="successAlert" class="alert alert-success py-2 small d-none"><i class="bi bi-check-circle me-1"></i><span id="successMessage"></span></div>
+    <div id="errorAlert" class="alert alert-danger py-2 small d-none"><i class="bi bi-exclamation-triangle me-1"></i><span id="errorMessage"></span></div>
+
+    <form id="settingsForm" enctype="multipart/form-data" novalidate>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">Clinic Information</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Clinic Name <span class="text-danger">*</span></label>
+                            <input name="clinicName" th:value="${settingsDto.clinicName}" class="form-control" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tagline</label>
+                            <input name="tagline" th:value="${settingsDto.tagline}" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <textarea name="address" class="form-control" rows="2" th:text="${settingsDto.address}"></textarea>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                <input name="phone" th:value="${settingsDto.phone}" class="form-control"/>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input name="email" type="email" th:value="${settingsDto.email}" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label class="form-label">Default Consultation Fee (₹)</label>
+                            <input name="consultationFeeDefault" type="number" step="0.01" min="0"
+                                   th:value="${settingsDto.consultationFeeDefault}" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Clinic Server URL</label>
+                            <input name="publicBaseUrl" th:value="${settingsDto.publicBaseUrl}" class="form-control"
+                                   th:placeholder="${settingsDto.suggestedServerUrl}"/>
+                            <small class="text-muted" th:if="${settingsDto.suggestedServerUrl}">
+                                Suggested: <strong th:text="${settingsDto.suggestedServerUrl}"></strong>
+                            </small>
+                        </div>
+                        <div class="mb-0">
+                            <label class="form-label">Clinic Logo</label>
+                            <div class="mb-2">
+                                <img id="logoPreview" th:src="${settingsDto.logoPath}" alt="Logo" style="max-height:60px;border-radius:8px"
+                                     th:style="${settingsDto.logoPath != null and !settingsDto.logoPath.isEmpty()} ? 'max-height:60px;border-radius:8px' : 'display:none'"/>
+                            </div>
+                            <input name="logoFile" id="logoFile" type="file" accept=".png,.jpg,.jpeg,.webp" class="form-control"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header gaja-card-header">SMTP Settings</div>
+                    <div class="card-body">
+                        <input type="hidden" name="smtpPort" th:value="${settingsDto.smtpPort}" id="smtpPortHidden"/>
+                        <input type="hidden" name="smtpEnableSsl" th:value="${settingsDto.smtpEnableSsl}" id="smtpSslHidden"/>
+                        <div class="mb-3">
+                            <label class="form-label">SMTP Host</label>
+                            <input name="smtpHost" th:value="${settingsDto.smtpHost}" class="form-control" placeholder="smtp.gmail.com"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">SMTP Port</label>
+                            <input id="smtpPortInput" type="number" th:value="${settingsDto.smtpPort}" class="form-control"
+                                   oninput="document.getElementById('smtpPortHidden').value=this.value"/>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input type="checkbox" id="smtpSslCheck" class="form-check-input" th:checked="${settingsDto.smtpEnableSsl}"
+                                   onchange="document.getElementById('smtpSslHidden').value=this.checked"/>
+                            <label for="smtpSslCheck" class="form-check-label">Enable SSL</label>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">SMTP Username</label>
+                            <input name="smtpUser" th:value="${settingsDto.smtpUser}" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">SMTP Password</label>
+                            <input name="smtpPassword" type="password" th:value="${settingsDto.smtpPassword}" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">From Email</label>
+                            <input name="smtpFromEmail" type="email" th:value="${settingsDto.smtpFromEmail}" class="form-control"/>
+                        </div>
+                        <div class="mb-0">
+                            <label class="form-label">From Name</label>
+                            <input name="smtpFromName" th:value="${settingsDto.smtpFromName}" class="form-control"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header gaja-card-header">Doctor &amp; Prescription PDF</div>
+            <div class="card-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label class="form-label">Doctor Name (on prescription)</label>
+                            <input name="doctorDisplayName" th:value="${settingsDto.doctorDisplayName}" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Qualifications</label>
+                            <input name="doctorQualification" th:value="${settingsDto.doctorQualification}" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Registration Number</label>
+                            <input name="doctorRegistrationNo" th:value="${settingsDto.doctorRegistrationNo}" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Specialization</label>
+                            <input name="doctorSpecialization" th:value="${settingsDto.doctorSpecialization}" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Consulting Hours</label>
+                            <input name="consultingHours" th:value="${settingsDto.consultingHours}" class="form-control"/>
+                        </div>
+                        <div class="mb-0">
+                            <label class="form-label">Doctor Signature</label>
+                            <div class="mb-2 p-2 bg-light rounded border">
+                                <img id="signaturePreview" th:src="${settingsDto.doctorSignaturePath}" alt="Signature"
+                                     style="max-height:80px;max-width:220px"
+                                     th:style="${settingsDto.doctorSignaturePath != null and !settingsDto.doctorSignaturePath.isEmpty()} ? 'max-height:80px;max-width:220px' : 'display:none'"/>
+                            </div>
+                            <input name="doctorSignatureFile" id="signatureFile" type="file" accept=".png,.jpg,.jpeg,.webp" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="form-label">Prescription Pad Template</label>
+                        <div class="mb-2 p-2 bg-light rounded border text-center">
+                            <img id="templatePreview" th:src="${settingsDto.prescriptionTemplatePath}" alt="Template"
+                                 style="max-height:220px;max-width:100%;object-fit:contain"
+                                 th:style="${settingsDto.prescriptionTemplatePath != null and !settingsDto.prescriptionTemplatePath.isEmpty()} ? 'max-height:220px;max-width:100%;object-fit:contain' : 'display:none'"/>
+                        </div>
+                        <input name="prescriptionTemplateFile" id="templateFile" type="file" accept=".png,.jpg,.jpeg,.webp" class="form-control"/>
+                        <div class="mt-3">
+                            <label class="form-label">Prescription Footer Message</label>
+                            <input name="prescriptionFooterMessage" th:value="${settingsDto.prescriptionFooterMessage}" class="form-control"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header gaja-card-header">Pharmacy Public Profile</div>
+            <div class="card-body">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label class="form-label">Pharmacist Name</label>
+                            <input name="pharmacistDisplayName" th:value="${settingsDto.pharmacistDisplayName}" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Qualification</label>
+                            <input name="pharmacistQualification" th:value="${settingsDto.pharmacistQualification}" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Designation</label>
+                            <input name="pharmacistDesignation" th:value="${settingsDto.pharmacistDesignation}" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Registration Number</label>
+                            <input name="pharmacistRegistrationNo" th:value="${settingsDto.pharmacistRegistrationNo}" class="form-control"/>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Experience</label>
+                                <input name="pharmacistExperience" th:value="${settingsDto.pharmacistExperience}" class="form-control" placeholder="e.g. 5+ Years"/>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Languages</label>
+                                <input name="pharmacistLanguages" th:value="${settingsDto.pharmacistLanguages}" class="form-control" placeholder="e.g. Tamil, English"/>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Availability</label>
+                                <input name="pharmacistAvailability" th:value="${settingsDto.pharmacistAvailability}" class="form-control" placeholder="e.g. Mon – Sat"/>
+                            </div>
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label class="form-label">Business Hours</label>
+                            <input name="pharmacistBusinessHours" th:value="${settingsDto.pharmacistBusinessHours}" class="form-control"/>
+                        </div>
+                        <div class="mb-0">
+                            <label class="form-label">About Pharmacist</label>
+                            <textarea name="pharmacistAbout" class="form-control" rows="4" th:text="${settingsDto.pharmacistAbout}"
+                                      placeholder="Professional bio shown on the pharmacy profile page."></textarea>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="form-label">Pharmacist Photo</label>
+                        <div class="mb-2 p-2 bg-light rounded border text-center">
+                            <img id="pharmacistPreview" th:src="${settingsDto.pharmacistPhotoPath}" alt="Pharmacist"
+                                 style="max-height:280px;max-width:100%;object-fit:cover;border-radius:12px"
+                                 th:style="${settingsDto.pharmacistPhotoPath != null and !settingsDto.pharmacistPhotoPath.isEmpty()} ? 'max-height:280px;max-width:100%;object-fit:cover;border-radius:12px' : 'display:none'"/>
+                        </div>
+                        <input name="pharmacistPhotoFile" id="pharmacistPhotoFile" type="file" accept=".png,.jpg,.jpeg,.webp" class="form-control"/>
+                        <p class="text-muted small mt-2 mb-4">Profile page: <a th:href="@{/medicals}" target="_blank" rel="noopener">/medicals</a></p>
+
+                        <h6 class="fw-bold mb-3">Statistics (animated counters)</h6>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <label class="form-label small">Years of Experience</label>
+                                <input name="pharmacistStatYears" th:value="${settingsDto.pharmacistStatYears}" class="form-control" placeholder="5"/>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small">Patients Assisted</label>
+                                <input name="pharmacistStatPatients" th:value="${settingsDto.pharmacistStatPatients}" class="form-control" placeholder="3000"/>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small">Prescriptions Dispensed</label>
+                                <input name="pharmacistStatPrescriptions" th:value="${settingsDto.pharmacistStatPrescriptions}" class="form-control" placeholder="10000"/>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small">Customer Satisfaction (%)</label>
+                                <input name="pharmacistStatSatisfaction" th:value="${settingsDto.pharmacistStatSatisfaction}" class="form-control" placeholder="98"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex flex-wrap gap-2">
+            <button type="button" id="saveBtn" class="btn btn-primary btn-lg">
+                <i class="bi bi-check-circle me-1"></i>Save Settings
+            </button>
+            <a th:href="@{/main-admin/home}" class="btn btn-outline-secondary btn-lg">Back to Dashboard</a>
+        </div>
+    </form>
+
+    <script th:inline="javascript">
+        (function () {
+            var saveBtn = document.getElementById('saveBtn');
+            var successAlert = document.getElementById('successAlert');
+            var errorAlert = document.getElementById('errorAlert');
+            var saveUrl = /*[[@{/main-admin/settings}]]*/ '/main-admin/settings';
+
+            function showSuccess(msg) {
+                document.getElementById('successMessage').textContent = msg;
+                successAlert.classList.remove('d-none');
+                errorAlert.classList.add('d-none');
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i>Save Settings';
+            }
+
+            function showError(msg) {
+                document.getElementById('errorMessage').textContent = msg;
+                errorAlert.classList.remove('d-none');
+                successAlert.classList.add('d-none');
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i>Save Settings';
+            }
+
+            function bindPreview(inputId, previewId) {
+                var input = document.getElementById(inputId);
+                if (!input) return;
+                input.addEventListener('change', function () {
+                    var file = this.files[0];
+                    if (!file) return;
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var preview = document.getElementById(previewId);
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            bindPreview('logoFile', 'logoPreview');
+            bindPreview('signatureFile', 'signaturePreview');
+            bindPreview('templateFile', 'templatePreview');
+            bindPreview('pharmacistPhotoFile', 'pharmacistPreview');
+
+            saveBtn.addEventListener('click', function () {
+                var clinicName = document.querySelector('input[name="clinicName"]').value.trim();
+                if (!clinicName) {
+                    showError('Clinic Name is required.');
+                    return;
+                }
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Saving...';
+                successAlert.classList.add('d-none');
+                errorAlert.classList.add('d-none');
+
+                fetch(saveUrl, {
+                    method: 'POST',
+                    body: new FormData(document.getElementById('settingsForm')),
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data.success) {
+                        if (data.logoPath) document.getElementById('logoPreview').src = data.logoPath + '?t=' + Date.now();
+                        if (data.doctorSignaturePath) document.getElementById('signaturePreview').src = data.doctorSignaturePath + '?t=' + Date.now();
+                        if (data.prescriptionTemplatePath) document.getElementById('templatePreview').src = data.prescriptionTemplatePath + '?t=' + Date.now();
+                        if (data.pharmacistPhotoPath) document.getElementById('pharmacistPreview').src = data.pharmacistPhotoPath + '?t=' + Date.now();
+                        document.getElementById('logoFile').value = '';
+                        document.getElementById('signatureFile').value = '';
+                        document.getElementById('templateFile').value = '';
+                        document.getElementById('pharmacistPhotoFile').value = '';
+                        showSuccess(data.message || 'Settings saved successfully.');
+                    } else {
+                        showError(data.message || 'Failed to save settings.');
+                    }
+                })
+                .catch(function (err) {
+                    showError('Network or server error: ' + err.message);
+                });
+            });
+        })();
+    </script>
+</main>
+</body>
+</html>

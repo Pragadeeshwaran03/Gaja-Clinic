@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<section id="pharmacy-contact" class="section-public bg-light-section" th:fragment="contact(pharmacy)">
+    <div class="container">
+        <div class="text-center mb-5 reveal">
+            <h2 class="section-title">Contact Pharmacy</h2>
+            <p class="section-subtitle mx-auto">Reach Gaja Medicals for prescriptions, medicine orders, and healthcare support.</p>
+        </div>
+        <div class="location-card reveal reveal-zoom">
+            <div class="row g-0">
+                <div class="col-lg-6 location-map-wrap">
+                    <iframe
+                        title="Gaja Medicals Location"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://maps.google.com/maps?q=No.39,+2nd+Main+Road,+Chitlapakkam,+Tambaram+Sanatorium,+Chennai+600047&amp;output=embed">
+                    </iframe>
+                </div>
+                <div class="col-lg-6">
+                    <div class="location-info">
+                        <h4><i class="bi bi-capsule me-2"></i>Gaja Clinic &amp; Medicals</h4>
+                        <p class="text-muted mb-3" th:text="${pharmacy.address}">
+                            No.39, 2nd Main Road, Chitlapakkam, Tambaram Sanatorium, Chennai - 600047
+                        </p>
+                        <p class="mb-2">
+                            <i class="bi bi-telephone-fill text-primary-accent me-2"></i>
+                            <a th:href="'tel:' + ${#strings.replace(pharmacy.phone, ' ', '')}" th:text="${pharmacy.phone}">98844 43162</a>
+                        </p>
+                        <p class="mb-0">
+                            <i class="bi bi-clock-fill text-primary-accent me-2"></i>
+                            <span th:text="${pharmacy.businessHours}">Mon – Sat, Evening Consultation</span>
+                        </p>
+                        <div class="location-actions">
+                            <a th:href="'tel:' + ${#strings.replace(pharmacy.phone, ' ', '')}" class="btn-call">
+                                <i class="bi bi-telephone-fill"></i> Call Now
+                            </a>
+                            <a th:href="${pharmacy.whatsAppUrl}" target="_blank" rel="noopener" class="btn-whatsapp">
+                                <i class="bi bi-whatsapp"></i> WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient History - Gaja Clinic</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/gaja-theme.css}">
+    <style>
+        .vital-pill { display:inline-flex; align-items:center; gap:0.35rem; padding:0.35rem 0.75rem;
+            border-radius:20px; font-size:0.82rem; font-weight:600; }
+        .vital-pill .vi-label { font-size:0.7rem; font-weight:500; opacity:0.75; }
+        .vp-ht  { background:#e8f5e9; color:#2e7d32; }
+        .vp-wt  { background:#e3f2fd; color:#0d47a1; }
+        .vp-temp{ background:#fff3e0; color:#e65100; }
+        .vp-bp  { background:#fce4ec; color:#b71c1c; }
+        .vp-pr  { background:#e8eaf6; color:#283593; }
+        .vp-cbg { background:#f3e5f5; color:#6a1b9a; }
+        .vp-spo2{ background:#e0f7fa; color:#006064; }
+    </style>
+</head>
+<body class="gaja-app">
+<nav class="navbar navbar-dark gaja-navbar">
+    <div class="container-fluid">
+        <span class="navbar-brand">Gaja Clinic — Doctor</span>
+        <form th:action="@{/account/logout}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+        </form>
+    </div>
+</nav>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h2 th:text="${history.patient.name}">Patient</h2>
+            <p class="text-muted mb-0">
+                <span th:text="${history.patient.patientCode}">PAT00001</span> &middot;
+                <span th:text="${history.patient.mobile}">mobile</span> &middot;
+                <span th:text="${history.patient.age}">0</span> yrs &middot;
+                <span th:text="${history.patient.gender}">Gender</span>
+            </p>
+        </div>
+        <a th:href="@{/doctor/consultation/create(patientId=${history.patient.id})}" class="btn btn-primary">Start New Consultation</a>
+    </div>
+
+    <!-- ── Vitals Card ─────────────────────────────────────────────── -->
+    <div class="card mb-4"
+         th:if="${history.patient.height != null
+              or history.patient.weight != null
+              or history.patient.temperature != null
+              or history.patient.bloodPressure != null
+              or history.patient.pulseRate != null
+              or history.patient.cbg != null
+              or history.patient.spO2 != null}">
+        <div class="card-header gaja-card-header">
+            <i class="bi bi-activity me-1"></i> Patient Vitals
+        </div>
+        <div class="card-body">
+            <div class="d-flex flex-wrap gap-2">
+                <span class="vital-pill vp-ht" th:if="${history.patient.height != null}">
+                    <span class="vi-label">Ht</span>
+                    <span th:text="${history.patient.height}"></span>
+                    <span class="vi-label">cm</span>
+                </span>
+                <span class="vital-pill vp-wt" th:if="${history.patient.weight != null}">
+                    <span class="vi-label">Wt</span>
+                    <span th:text="${history.patient.weight}"></span>
+                    <span class="vi-label">kg</span>
+                </span>
+                <span class="vital-pill vp-temp" th:if="${history.patient.temperature != null}">
+                    <span class="vi-label">Temp</span>
+                    <span th:text="${history.patient.temperature}"></span>
+                </span>
+                <span class="vital-pill vp-bp" th:if="${history.patient.bloodPressure != null}">
+                    <span class="vi-label">BP</span>
+                    <span th:text="${history.patient.bloodPressure}"></span>
+                    <span class="vi-label">mmHg</span>
+                </span>
+                <span class="vital-pill vp-pr" th:if="${history.patient.pulseRate != null}">
+                    <span class="vi-label">PR</span>
+                    <span th:text="${history.patient.pulseRate}"></span>
+                    <span class="vi-label">/min</span>
+                </span>
+                <span class="vital-pill vp-cbg" th:if="${history.patient.cbg != null}">
+                    <span class="vi-label">CBG</span>
+                    <span th:text="${history.patient.cbg}"></span>
+                    <span class="vi-label">mg/dL</span>
+                </span>
+                <span class="vital-pill vp-spo2" th:if="${history.patient.spO2 != null}">
+                    <span class="vi-label">SpO₂</span>
+                    <span th:text="${history.patient.spO2}"></span>
+                    <span class="vi-label">%</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- ── End Vitals Card ─────────────────────────────────────── -->
+
+    <div class="card mb-4" th:if="${history.lastVisit != null}">
+        <div class="card-header gaja-card-header">
+            Last Visit — <span th:text="${#temporals.format(history.lastVisit.dateCreated, 'dd/MM/yyyy')}">date</span>
+        </div>
+        <div class="card-body">
+            <p><strong>Prescription:</strong> <span th:text="${history.lastVisit.prescriptionNumber}"></span></p>
+            <p><strong>Doctor:</strong>
+                <span th:text="${history.lastVisit.doctor != null && history.lastVisit.doctor.user != null ? history.lastVisit.doctor.user.fullName : '—'}"></span>
+            </p>
+            <p><strong>Status:</strong> <span th:text="${history.lastVisit.status}"></span></p>
+            <table class="table table-sm mt-2" th:if="${history.lastVisit.items != null && !history.lastVisit.items.isEmpty()}">
+                <thead><tr><th>Medicine</th><th>Dosage</th><th>Qty</th><th>Duration</th></tr></thead>
+                <tbody>
+                <tr th:each="item : ${history.lastVisit.items}">
+                    <td th:text="${item.medicineName}"></td>
+                    <td th:text="${item.dosage}"></td>
+                    <td th:text="${item.quantity}"></td>
+                    <td th:text="${item.duration}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header gaja-card-header">Previous Prescription PDFs</div>
+        <div class="card-body">
+            <p class="text-muted mb-0" th:if="${history.previousPdfs.isEmpty()}">No PDF records yet.</p>
+            <ul class="list-group list-group-flush" th:if="${!history.previousPdfs.isEmpty()}">
+                <li class="list-group-item d-flex justify-content-between align-items-center" th:each="pdf : ${history.previousPdfs}">
+                    <span>Visit <span th:text="${#temporals.format(pdf.visitDate, 'dd/MM/yyyy')}"></span> — <span th:text="${pdf.fileName}"></span></span>
+                    <a th:href="${pdf.filePath}" target="_blank" class="btn btn-sm btn-outline-primary">View PDF</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card" th:if="${history.visitHistory.size() > 1}">
+        <div class="card-header">All Visits</div>
+        <div class="table-responsive">
+            <table class="table table-striped mb-0">
+                <thead><tr><th>Date</th><th>Prescription #</th><th>Doctor</th><th>Status</th><th>Items</th></tr></thead>
+                <tbody>
+                <tr th:each="visit : ${history.visitHistory}">
+                    <td th:text="${#temporals.format(visit.dateCreated, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${visit.prescriptionNumber}"></td>
+                    <td th:text="${visit.doctor != null && visit.doctor.user != null ? visit.doctor.user.fullName : '—'}"></td>
+                    <td th:text="${visit.status}"></td>
+                    <td th:text="${visit.items != null ? visit.items.size() : 0}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a th:href="@{/doctor/patient/create}" class="btn btn-secondary mt-3">Back to Registration</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/admin-layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Admin Dashboard - Gaja Clinic</title>
+</head>
+<body>
+<main>
+    <h2 class="mb-1"><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</h2>
+    <p class="text-muted mb-4">Gaja Clinic &amp; Medicals — overview</p>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="stat-card stat-card-blue">
+                <div class="stat-value" th:text="${dashboard.totalPatients}">0</div>
+                <div class="stat-label">Patients</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="stat-card stat-card-green">
+                <div class="stat-value" th:text="${dashboard.totalDoctors}">0</div>
+                <div class="stat-label">Doctors</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="stat-card stat-card-blue">
+                <div class="stat-value" th:text="${dashboard.totalPrescriptions}">0</div>
+                <div class="stat-label">Prescriptions</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="stat-card stat-card-green">
+                <div class="stat-value" th:text="${dashboard.totalBills}">0</div>
+                <div class="stat-label">Bills</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-6 col-xl-2">
+            <div class="stat-card stat-card-revenue">
+                <div class="stat-value" th:text="'₹' + ${#numbers.formatInteger(dashboard.revenueToday, 0, 'COMMA')}">₹0</div>
+                <div class="stat-label">Today</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-6 col-xl-2">
+            <div class="stat-card stat-card-revenue">
+                <div class="stat-value" th:text="'₹' + ${#numbers.formatInteger(dashboard.revenueThisMonth, 0, 'COMMA')}">₹0</div>
+                <div class="stat-label">This Month</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header"><i class="bi bi-clock-history me-2"></i>Recent Activities</div>
+                <div class="card-body p-0" th:if="${dashboard.recentActivities.isEmpty()}">
+                    <div class="text-center text-muted py-4">No recent activity yet.</div>
+                </div>
+                <ul class="list-group list-group-flush" th:if="${!dashboard.recentActivities.isEmpty()}">
+                    <li class="list-group-item d-flex justify-content-between align-items-start py-3"
+                        th:each="a : ${dashboard.recentActivities}">
+                        <span>
+                            <span class="badge rounded-pill me-2"
+                                  th:classappend="${a.type == 'bill'} ? 'bg-success' : (${a.type == 'prescription'} ? 'bg-primary' : 'bg-info')"
+                                  th:text="${a.type}">type</span>
+                            <span th:text="${a.description}">Activity</span>
+                        </span>
+                        <small class="text-muted text-nowrap ms-2"
+                               th:text="${#temporals.format(a.timestamp, 'dd MMM yyyy HH:mm')}">time</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header gaja-card-header"><i class="bi bi-lightning me-2"></i>Quick Actions</div>
+                <div class="card-body d-grid gap-2">
+                    <a th:href="@{/main-admin/pdf-archive}" class="btn btn-outline-primary">
+                        <i class="bi bi-file-earmark-pdf me-1"></i> PDF Archive
+                    </a>
+                    <a th:href="@{/main-admin/reports}" class="btn btn-outline-primary">
+                        <i class="bi bi-download me-1"></i> Reports &amp; Export
+                    </a>
+                    <a th:href="@{/main-admin/settings}" class="btn btn-outline-primary">
+                        <i class="bi bi-gear me-1"></i> Clinic Settings
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

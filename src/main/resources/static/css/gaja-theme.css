@@ -1,0 +1,184 @@
+/* Gaja Clinic — shared brand theme (admin, doctor, pharmacy, login) */
+:root {
+    --gaja-primary: #E53935;
+    --gaja-primary-light: #EF5350;
+    --gaja-primary-dark: #B71C1C;
+    --gaja-soft: #FFEBEE;
+    --gaja-white: #ffffff;
+    --bs-primary: #E53935;
+    --bs-primary-rgb: 229, 57, 53;
+    --bs-link-color: #E53935;
+    --bs-link-hover-color: #B71C1C;
+}
+
+@keyframes gaja-gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes gaja-navbar-flow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* ── Animated red & white page backgrounds ── */
+body.gaja-app {
+    min-height: 100vh;
+    background: linear-gradient(-45deg, var(--gaja-white), #fff5f5, #ffcdd2, var(--gaja-white), var(--gaja-soft));
+    background-size: 400% 400%;
+    animation: gaja-gradient-shift 14s ease infinite;
+}
+
+body.page-login {
+    min-height: 100vh;
+    background: linear-gradient(-45deg, var(--gaja-primary-dark), var(--gaja-primary), var(--gaja-white), var(--gaja-soft), var(--gaja-primary-dark));
+    background-size: 400% 400%;
+    animation: gaja-gradient-shift 10s ease infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+/* ── Animated navbar (red ↔ deep red) ── */
+.gaja-navbar {
+    background: linear-gradient(90deg, #8E0000, var(--gaja-primary-dark), var(--gaja-primary), var(--gaja-primary-dark), #8E0000) !important;
+    background-size: 300% 100% !important;
+    animation: gaja-navbar-flow 8s ease infinite;
+}
+
+/* ── Login card ── */
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--gaja-white);
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 1rem 3rem rgba(183, 28, 28, 0.25);
+}
+
+.login-header {
+    background: linear-gradient(135deg, var(--gaja-primary-dark), var(--gaja-primary), var(--gaja-primary-dark));
+    background-size: 200% 200%;
+    animation: gaja-gradient-shift 6s ease infinite;
+    color: var(--gaja-white);
+    text-align: center;
+    padding: 2rem 1.5rem 1.5rem;
+}
+
+.login-logo {
+    font-size: 2.5rem;
+    margin-bottom: .5rem;
+}
+
+.login-body {
+    padding: 1.5rem;
+}
+
+.page-login a:not(.btn) {
+    color: var(--gaja-primary);
+}
+
+.page-login a:not(.btn):hover {
+    color: var(--gaja-primary-dark);
+}
+
+.page-login .form-control:focus {
+    border-color: var(--gaja-primary);
+    box-shadow: 0 0 0 0.2rem rgba(229, 57, 53, 0.2);
+}
+
+/* ── Stat cards (admin dashboard) ── */
+.stat-card {
+    border-radius: 12px;
+    padding: 1.25rem;
+    color: var(--gaja-white);
+    min-height: 110px;
+    background-size: 300% 300%;
+    animation: gaja-gradient-shift 8s ease infinite;
+}
+
+.stat-card-blue {
+    background-image: linear-gradient(135deg, #EF5350, var(--gaja-primary), var(--gaja-primary-dark), #EF5350);
+}
+
+.stat-card-green {
+    background-image: linear-gradient(135deg, var(--gaja-primary), #C62828, var(--gaja-primary-dark), var(--gaja-primary));
+}
+
+.stat-card-revenue {
+    background-image: linear-gradient(135deg, var(--gaja-primary-dark), #8E0000, var(--gaja-primary-dark), #C62828);
+}
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.stat-label {
+    opacity: .9;
+    font-size: .9rem;
+}
+
+/* ── Animated card headers ── */
+.gaja-card-header {
+    background: linear-gradient(90deg, var(--gaja-primary-dark), var(--gaja-primary), var(--gaja-primary-dark)) !important;
+    background-size: 200% 100% !important;
+    animation: gaja-navbar-flow 6s ease infinite;
+    color: var(--gaja-white) !important;
+    border-bottom: none;
+}
+
+/* ── Cards on animated backgrounds ── */
+.gaja-app .card,
+.page-login .login-card {
+    border: none;
+    box-shadow: 0 4px 24px rgba(183, 28, 28, 0.1);
+}
+
+.gaja-app .card {
+    background: rgba(255, 255, 255, 0.96);
+}
+
+/* ── Buttons & badges — red theme ── */
+.btn-primary {
+    --bs-btn-bg: var(--gaja-primary);
+    --bs-btn-border-color: var(--gaja-primary);
+    --bs-btn-hover-bg: var(--gaja-primary-light);
+    --bs-btn-hover-border-color: var(--gaja-primary-light);
+    --bs-btn-active-bg: var(--gaja-primary-dark);
+    --bs-btn-active-border-color: var(--gaja-primary-dark);
+    --bs-btn-disabled-bg: var(--gaja-primary);
+    --bs-btn-disabled-border-color: var(--gaja-primary);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--gaja-primary);
+    --bs-btn-border-color: var(--gaja-primary);
+    --bs-btn-hover-bg: var(--gaja-primary);
+    --bs-btn-hover-border-color: var(--gaja-primary);
+    --bs-btn-active-bg: var(--gaja-primary-dark);
+    --bs-btn-active-border-color: var(--gaja-primary-dark);
+}
+
+.badge.gaja-badge,
+.gaja-app .badge.bg-primary {
+    background: linear-gradient(135deg, var(--gaja-primary), var(--gaja-primary-dark)) !important;
+}
+
+.gaja-app .badge.bg-success,
+.gaja-app .badge.bg-info {
+    background: linear-gradient(135deg, var(--gaja-primary-light), var(--gaja-primary)) !important;
+    color: var(--gaja-white) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.gaja-app,
+    body.page-login,
+    .gaja-navbar,
+    .login-header,
+    .stat-card,
+    .gaja-card-header {
+        animation: none;
+    }
+}

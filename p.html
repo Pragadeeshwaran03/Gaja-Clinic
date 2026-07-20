@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Patient - Gaja Clinic</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-dark" style="background:#0d47a1;">
+    <div class="container-fluid">
+        <span class="navbar-brand"><i class="bi bi-heart-pulse-fill me-1"></i> Gaja Clinic — Doctor</span>
+        <div class="d-flex align-items-center text-white gap-3">
+            <span><i class="bi bi-person-circle me-1"></i><span>Dr. Gaja</span></span>
+            <form action="/account/logout" method="post"><input type="hidden" name="_csrf" value="X8WfHbgpbrnIwQ_3CbjyIphY1Ydljj2GC5TwvWs5vLz0JiAxaKeoLY4fD4rlpT7OOpXGE_k--OVStgyrafDF2A1d3YTAQ0QI"/>
+                <input type="hidden" name="_csrf" value="X8WfHbgpbrnIwQ_3CbjyIphY1Ydljj2GC5TwvWs5vLz0JiAxaKeoLY4fD4rlpT7OOpXGE_k--OVStgyrafDF2A1d3YTAQ0QI"/>
+                <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="container py-4">
+    
+
+    <h2 class="mb-1">Register Patient</h2>
+    <p class="text-muted mb-4">Search existing patients or register a new one</p>
+
+    <div class="card mb-4">
+        <div class="card-header">Search by Mobile</div>
+        <div class="card-body">
+            <div class="input-group">
+                <input type="text" id="searchMobile" class="form-control" placeholder="Enter mobile number"/>
+                <button type="button" id="btnSearch" class="btn btn-primary">Search</button>
+            </div>
+            <div id="searchResult" class="mt-2 small"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">New Patient</div>
+        <div class="card-body">
+            <form action="/doctor/patient/create" method="post"><input type="hidden" name="_csrf" value="X8WfHbgpbrnIwQ_3CbjyIphY1Ydljj2GC5TwvWs5vLz0JiAxaKeoLY4fD4rlpT7OOpXGE_k--OVStgyrafDF2A1d3YTAQ0QI"/>
+                <input type="hidden" name="_csrf" value="X8WfHbgpbrnIwQ_3CbjyIphY1Ydljj2GC5TwvWs5vLz0JiAxaKeoLY4fD4rlpT7OOpXGE_k--OVStgyrafDF2A1d3YTAQ0QI"/>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Name</label>
+                        <input class="form-control" placeholder="Full name" id="name" name="name" value=""/>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Mobile</label>
+                        <input class="form-control" id="patientMobile" placeholder="10-digit mobile" name="mobile" value=""/>
+                        
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Age</label>
+                        <input type="number" min="0" class="form-control" id="age" name="age" value=""/>
+                        
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Gender</label>
+                        <select class="form-select" id="gender" name="gender">
+                            <option value="">-- Select --</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Blood Pressure</label>
+                        <input class="form-control" placeholder="e.g. 120/80" id="bloodPressure" name="bloodPressure" value=""/>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Blood Sugar</label>
+                        <input class="form-control" placeholder="e.g. 95" id="bloodSugar" name="bloodSugar" value=""/>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">Register &amp; Start Consultation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+document.getElementById('btnSearch').addEventListener('click', async function () {
+    const mobile = document.getElementById('searchMobile').value.trim();
+    const result = document.getElementById('searchResult');
+    if (!mobile) { result.innerHTML = '<span class="text-warning">Enter a mobile number.</span>'; return; }
+    result.innerHTML = '<span class="text-muted">Searching...</span>';
+    const res = await fetch('/doctor/patient/search?mobile=' + encodeURIComponent(mobile));
+    const data = await res.json();
+    if (data.exists) {
+        result.innerHTML = '<div class="alert alert-success py-2 mb-0">Found: <strong>' + data.name + '</strong> (' + data.patientCode + '). ' +
+            '<a href="/doctor/consultation/create?patientId=' + data.patientId + '">Start consultation</a> &middot; ' +
+            '<a href="' + data.historyUrl + '">View history</a></div>';
+    } else {
+        result.innerHTML = '<div class="alert alert-info py-2 mb-0">No patient found. Fill the form below to register.</div>';
+        document.getElementById('patientMobile').value = mobile;
+    }
+});
+</script>
+</body>
+</html>

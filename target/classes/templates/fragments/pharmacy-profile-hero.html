@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<section class="section-public bg-light-section pt-navbar" th:fragment="hero(pharmacy)">
+    <div class="container">
+        <div class="pharmacy-page-header reveal">
+            <a th:href="@{/}" class="pharmacy-back-link">
+                <i class="bi bi-arrow-left me-1"></i>Back to Home
+            </a>
+            <h1 class="section-title mb-2">Gaja Medicals</h1>
+            <p class="section-subtitle mx-auto">Professional pharmacy care with genuine medicines and patient-first guidance.</p>
+        </div>
+
+        <div class="pharmacy-showcase reveal reveal-zoom">
+            <div class="pharmacy-showcase-photo reveal reveal-left">
+                <div class="pharmacy-photo-frame glass-card">
+                    <img th:src="@{${pharmacy.photoPath}}" th:alt="${pharmacy.displayName}" loading="eager"/>
+                    <div class="pharmacy-photo-badge">
+                        <i class="bi bi-patch-check-fill"></i> Registered Pharmacist
+                    </div>
+                </div>
+            </div>
+            <div class="pharmacy-showcase-info reveal reveal-right">
+                <span class="pharmacy-tag"><i class="bi bi-capsule me-1"></i> <span th:text="${pharmacy.designation}">Registered Pharmacist</span></span>
+                <h2 class="pharmacy-name" th:text="${pharmacy.displayName}">KARTHIK. S</h2>
+                <p class="pharmacy-reg">Registration No. <strong th:text="${pharmacy.registrationNo}">49846 A1</strong></p>
+                <div class="mb-3">
+                    <span class="qual-badge qual-badge-blue" th:text="${pharmacy.qualification}">B. Pharm</span>
+                    <span class="qual-badge qual-badge-green" th:text="${pharmacy.designation}">Registered Pharmacist</span>
+                </div>
+                <div class="pharmacy-info-cards">
+                    <div class="pharmacy-info-mini">
+                        <i class="bi bi-briefcase"></i>
+                        <strong>Experience</strong>
+                        <span th:text="${pharmacy.experience}">—</span>
+                    </div>
+                    <div class="pharmacy-info-mini">
+                        <i class="bi bi-translate"></i>
+                        <strong>Languages Spoken</strong>
+                        <span th:text="${pharmacy.languages}">—</span>
+                    </div>
+                    <div class="pharmacy-info-mini">
+                        <i class="bi bi-clock"></i>
+                        <strong>Availability</strong>
+                        <span th:text="${pharmacy.availability}">—</span>
+                    </div>
+                    <div class="pharmacy-info-mini">
+                        <i class="bi bi-telephone"></i>
+                        <strong>Contact</strong>
+                        <span th:text="${pharmacy.phone}">98844 43162</span>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap gap-3 mt-2">
+                    <a th:href="${pharmacy.whatsAppUrl}" target="_blank" rel="noopener" class="btn btn-pharmacy-primary">
+                        <i class="bi bi-whatsapp me-2"></i>Contact Pharmacy
+                    </a>
+                    <a href="#pharmacy-contact" class="btn btn-pharmacy-outline">
+                        <i class="bi bi-calendar-check me-2"></i>Book Consultation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

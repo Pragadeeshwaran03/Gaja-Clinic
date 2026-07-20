@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Bill - Gaja Clinic</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/gaja-theme.css}">
+</head>
+<body class="gaja-app">
+<nav class="navbar navbar-dark gaja-navbar">
+    <div class="container-fluid">
+        <span class="navbar-brand">Gaja Clinic — Pharmacy</span>
+        <form th:action="@{/account/logout}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+        </form>
+    </div>
+</nav>
+<div class="container py-4">
+    <h2 class="mb-1">Create Bill</h2>
+    <p class="text-muted mb-4">Prescription #<span th:text="${prescription.prescriptionNumber}"></span></p>
+
+    <div id="errorAlert" class="alert alert-danger py-2 small d-none"><span id="errorMessage"></span></div>
+
+    <div class="row g-4">
+        <!-- Left: Doctor's Prescription (read-only) -->
+        <div class="col-lg-8">
+            <!-- Patient Info -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-3"><div class="text-muted small">Patient</div><div th:text="${prescription.patient != null ? prescription.patient.name : '—'}"></div></div>
+                <div class="col-md-3"><div class="text-muted small">Code</div><div th:text="${prescription.patient != null ? prescription.patient.patientCode : '—'}"></div></div>
+                <div class="col-md-3"><div class="text-muted small">Mobile</div><div th:text="${prescription.patient != null ? prescription.patient.mobile : '—'}"></div></div>
+                <div class="col-md-3"><div class="text-muted small">Doctor</div><div th:text="${prescription.doctor != null && prescription.doctor.user != null ? prescription.doctor.user.fullName : '—'}"></div></div>
+            </div>
+
+            <!-- Medicines Table (view only, no price) -->
+            <div class="card mb-3">
+                <div class="card-header">Doctor's Prescription — Medicines</div>
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Medicine</th>
+                                <th>Dosage</th>
+                                <th>Qty</th>
+                                <th>Duration</th>
+                                <th>Instructions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item, stat : ${prescription.items}">
+                                <td th:text="${stat.count}"></td>
+                                <td><strong th:text="${item.medicineName}"></strong></td>
+                                <td th:text="${item.dosage}"></td>
+                                <td th:text="${item.quantity}"></td>
+                                <td th:text="${item.duration}"></td>
+                                <td th:text="${item.instructions}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Payment Details -->
+        <div class="col-lg-4">
+            <form id="billForm">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <input type="hidden" name="prescriptionId" th:value="${billCreateDto.prescriptionId}"/>
+
+                <!-- Summary -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between py-1 border-bottom">
+                            <span>Consultation Fee</span>
+                            <strong id="sumConsultation">₹0.00</strong>
+                        </div>
+                        <div class="d-flex justify-content-between py-1 border-bottom">
+                            <span id="sumOtherLabel">Injection / Other Charges</span>
+                            <strong id="sumOtherCharges">₹0.00</strong>
+                        </div>
+                        <div class="d-flex justify-content-between py-1 border-bottom text-danger">
+                            <span>Discount</span>
+                            <strong id="sumDiscount">- ₹0.00</strong>
+                        </div>
+                        <div class="d-flex justify-content-between py-2 fw-bold fs-5">
+                            <span>Total Payable</span>
+                            <span class="text-success" id="sumTotal">₹0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Fields -->
+                <div class="card">
+                    <div class="card-header">Payment Details</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Consultation Fee (₹)</label>
+                            <input type="number" step="0.01" min="0" name="consultationFee" id="consultationFee"
+                                   th:value="${billCreateDto.consultationFee}" class="form-control" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Injection / Other Charges (₹)</label>
+                            <input type="number" step="0.01" min="0" name="otherCharges" id="otherCharges"
+                                   th:value="${billCreateDto.otherCharges}" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description (optional)</label>
+                            <input type="text" name="otherChargesDescription" id="otherChargesDescription"
+                                   th:value="${billCreateDto.otherChargesDescription}"
+                                   class="form-control" placeholder="e.g. Inj. Diclofenac, Lab test"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Discount (₹)</label>
+                            <input type="number" step="0.01" min="0" name="discount" id="discount"
+                                   th:value="${billCreateDto.discount}" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Payment Method</label>
+                            <select name="paymentMethod" id="paymentMethod" class="form-select" required>
+                                <option value="Cash">Cash</option>
+                                <option value="UPI">UPI</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 d-none" id="utrDiv">
+                            <label class="form-label">UTR Number</label>
+                            <input type="text" name="utrNo" id="utrNo" class="form-control" placeholder="Enter UPI reference"/>
+                        </div>
+                        <button type="button" id="submitBill" class="btn btn-primary w-100">Process Bill</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+(function () {
+    var submitBtn = document.getElementById('submitBill');
+    var errorAlert = document.getElementById('errorAlert');
+    var errorMsg = document.getElementById('errorMessage');
+
+    function showError(msg) {
+        errorMsg.textContent = msg;
+        errorAlert.classList.remove('d-none');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function hideError() { errorAlert.classList.add('d-none'); }
+
+    document.getElementById('paymentMethod').addEventListener('change', function () {
+        document.getElementById('utrDiv').classList.toggle('d-none', this.value !== 'UPI');
+        if (this.value !== 'UPI') document.getElementById('utrNo').value = '';
+    });
+
+    function recalc() {
+        var consult = parseFloat(document.getElementById('consultationFee').value) || 0;
+        var other = parseFloat(document.getElementById('otherCharges').value) || 0;
+        var disc = parseFloat(document.getElementById('discount').value) || 0;
+        var desc = document.getElementById('otherChargesDescription').value.trim();
+        var total = consult + other - disc;
+        document.getElementById('sumConsultation').textContent = '₹' + consult.toFixed(2);
+        document.getElementById('sumOtherCharges').textContent = '₹' + other.toFixed(2);
+        document.getElementById('sumOtherLabel').textContent = desc || 'Injection / Other Charges';
+        document.getElementById('sumDiscount').textContent = '- ₹' + disc.toFixed(2);
+        document.getElementById('sumTotal').textContent = '₹' + (total < 0 ? '0.00' : total.toFixed(2));
+    }
+    document.getElementById('consultationFee').addEventListener('input', recalc);
+    document.getElementById('otherCharges').addEventListener('input', recalc);
+    document.getElementById('otherChargesDescription').addEventListener('input', recalc);
+    document.getElementById('discount').addEventListener('input', recalc);
+    recalc();
+
+    submitBtn.addEventListener('click', function () {
+        hideError();
+        if (document.getElementById('paymentMethod').value === 'UPI' && document.getElementById('utrNo').value.trim() === '') {
+            showError('UTR number is required for UPI payments.'); return;
+        }
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Processing...';
+        fetch('/pharmacy/bill/create', {
+            method: 'POST',
+            body: new FormData(document.getElementById('billForm')),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(function (r) { if (!r.ok) throw new Error('Server error: ' + r.status); return r.json(); })
+        .then(function (data) {
+            if (data.success) window.location.href = data.redirectUrl;
+            else { submitBtn.disabled = false; submitBtn.textContent = 'Process Bill'; showError(data.message || 'Error'); }
+        })
+        .catch(function (err) {
+            submitBtn.disabled = false; submitBtn.textContent = 'Process Bill';
+            showError('Network or server error: ' + err.message);
+        });
+    });
+}());
+</script>
+</body>
+</html>
